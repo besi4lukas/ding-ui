@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
-import { Col, Row, Button, Modal, Alert  } from 'antd';
+import { Col, Row, Button, Modal, Alert, message  } from 'antd';
 import PinField from "react-pin-field";
-import { checkNumberGuess } from './utils';
+import { checkNumberGuess, maxTries } from './utils';
 
 const headerStyle = {
     textAlign: 'center',
@@ -47,6 +47,13 @@ const infoTextStyle = {
     height: 100
 }
 
+const maxTextStyle = {
+    textAlign: 'center',
+    fontSize: '10px',
+    marginTop: '5px',
+    height: 20
+}
+
 const GamePageComponent = ({ 
     setShowGameBoard, 
     inputLength, 
@@ -59,6 +66,9 @@ const GamePageComponent = ({
     const [showAlert, setshowAlert] = useState(false);
     const [dead, setDead] = useState(0);
     const [inj, setInjured] = useState(0);
+    const [messageApi, contextHolder] = message.useMessage();
+    const [tries, setTries] = useState(maxTries[inputLength]);
+    const [winner, setWinner] = useState(false);
 
     const closeGame = () => {
         setCloseGameModal(false);
@@ -69,11 +79,23 @@ const GamePageComponent = ({
     const checkGuess = () => {
         if (completed){
             let check = checkNumberGuess(guessNumber, code.toString().split(""));
+            setTries(tries - 1);
+            setWinner(check.isWinner);
             setDead(check.dead);
             setInjured(check.inj);
+           
 
             if(check.isWinner){
                 setWinModal(true);
+            }else if (check.isWinner === false && tries - 1 > 0){
+                messageApi
+                .open({
+                    type: 'loading',
+                    content: 'Check in progress..',
+                    duration: 2.5,
+                })
+                .then(() => message.success('Wrong Guess! Try Again', 1.5))
+                .then(() => message.info('Check hint for more help', 2.5));
             }
         }else{
             setshowAlert(true);
@@ -87,8 +109,16 @@ const GamePageComponent = ({
         setCode(value);
     };
 
+    useEffect(()=>{
+        if(tries === 0){
+            setWinModal(true);
+        }
+    },[tries, setTries])
+    
+
     return(
         <Row>
+            {contextHolder}
             <Col span={24}>
                 <div style={headerStyle}> 
                     <div style={heading}><Button type="text" icon={<CloseOutlined />} onClick={() => setCloseGameModal(true)}> Close Game </Button></div>
@@ -103,6 +133,9 @@ const GamePageComponent = ({
                         </div>
                     </div>
                     <div style={numberInputStyle}>
+                        <div style={maxTextStyle}>
+                            <p>{`Max Tries: ${tries}`}</p>
+                        </div>
                         <PinField
                             className="field-a"
                             length={inputLength}
@@ -128,10 +161,10 @@ const GamePageComponent = ({
                 closable={false}
                 footer={[
                     <Button key="back" onClick={() => setCloseGameModal(false)}>
-                      Return
+                      No
                     </Button>,
-                    <Button key="submit" type="primary" onClick={() => closeGame()}>
-                      Close Game
+                    <Button key="submit" type="primary" onClick={() => closeGame()} danger>
+                      Yes - Close Game
                     </Button>,
                   ]}
             >
@@ -143,12 +176,12 @@ const GamePageComponent = ({
                 open={winModal}
                 closable={false}
                 footer={[
-                    <Button key="submit" type="primary" onClick={() => closeGame()}>
+                    <Button key="submit" type="primary" onClick={() => closeGame()} danger>
                       CLOSE GAME BOARD
                     </Button>,
                   ]}
             >
-               <p>Congratulations! You guessed right</p>
+                <p> {winner ? `Congratulations! You guessed right` : `You Lost! The number is ${guessNumber.join("")} try again!`}  </p>
             </Modal>
         </Row>
     );

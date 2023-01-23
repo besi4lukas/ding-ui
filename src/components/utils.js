@@ -35,3 +35,10 @@ export const checkNumberGuess = (guess, userGuess) => {
 
     return { isWinner: false, dead: deadCount, inj: injCount};
 }
+
+export const maxTries = {
+    3: 20,
+    4: 22,
+    5: 25,
+    6: 30
+}
