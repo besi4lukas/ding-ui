@@ -37,8 +37,8 @@ export const checkNumberGuess = (guess, userGuess) => {
 }
 
 export const maxTries = {
-    3: 20,
-    4: 22,
-    5: 25,
-    6: 30
+    3: 12,
+    4: 16,
+    5: 20,
+    6: 24
 }
