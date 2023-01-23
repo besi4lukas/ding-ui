@@ -20,7 +20,7 @@ const subHeading = {
     textAlign: 'start',
     fontSize: '14px',
     height: 120,
-    marginTop: '100px',
+    marginTop: '50px',
     paddingLeft: '20px'
 }
 
@@ -31,12 +31,12 @@ const hintStyle = {
 
 const buttonStyle = {
     fontSize: '18px',
-    marginTop: '40px',
+    marginTop: '20px',
     fontWeight: 'bold'
 }
 
 const numberInputStyle = {
-    height: 150,
+    height: 120,
     paddingTop: '50px'
 }
 
