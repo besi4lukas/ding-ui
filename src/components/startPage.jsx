@@ -71,7 +71,7 @@ const StartPageComponent = ({
                       ]}
             >
                 <p>Select the number of digits to guess</p>
-                <InputNumber min={3} max={6} defaultValue={3} onChange={onChange} />
+                <InputNumber min={3} max={6} defaultValue={3} onChange={onChange} inputMode='numeric' />
             </Modal>
         </Row>
     );

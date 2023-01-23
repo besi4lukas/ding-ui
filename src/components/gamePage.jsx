@@ -143,6 +143,7 @@ const GamePageComponent = ({
                             onChange={onChange}
                             onComplete={() => setCompleted(true)}
                             format={k => k.toUpperCase()}
+                            inputMode='numeric'
                         />
                     </div>
                     <div style={buttonStyle}>
