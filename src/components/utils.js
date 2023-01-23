@@ -22,7 +22,7 @@ export const checkNumberGuess = (guess, userGuess) => {
         }
     }
 
-    if(possibleInjuredList.length == 0){
+    if(possibleInjuredList.length === 0){
         return { isWinner: true , dead: deadCount, inj: injCount };
     }
 
