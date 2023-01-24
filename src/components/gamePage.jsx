@@ -1,58 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
-import { Col, Row, Button, Modal, Alert, message  } from 'antd';
+import { Col, Row, Button, Modal, Alert, message, Divider  } from 'antd';
 import PinField from "react-pin-field";
 import { checkNumberGuess, maxTries } from './utils';
-
-const headerStyle = {
-    textAlign: 'center',
-    color: '#000',
-    height: 700
-  };
-
-const heading = {
-    textAlign: 'start',
-    fontSize: '20px',
-    textShadow: "2px 2px 2px #A89CC9"
-}
-
-const subHeading = {
-    textAlign: 'start',
-    fontSize: '14px',
-    height: 120,
-    marginTop: '50px',
-    paddingLeft: '20px'
-}
-
-const hintStyle = {
-    textAlign: 'center',
-    fontSize: '24px',
-}
-
-const buttonStyle = {
-    fontSize: '18px',
-    marginTop: '20px',
-    fontWeight: 'bold'
-}
-
-const numberInputStyle = {
-    height: 120,
-    paddingTop: '50px'
-}
-
-const infoTextStyle = {
-    textAlign: 'center',
-    fontSize: '10px',
-    marginTop: '30px',
-    height: 100
-}
-
-const maxTextStyle = {
-    textAlign: 'center',
-    fontSize: '10px',
-    marginTop: '5px',
-    height: 20
-}
+import { 
+    headerGameStyle, 
+    gameHeading, 
+    gameSubHeading, 
+    hintStyle, 
+    numberInputStyle, 
+    gameInfoTextStyle, 
+    maxTextStyle, 
+    gameButtonContainerStyle,
+    buttonColor } from './dingStyle';
 
 const GamePageComponent = ({ 
     setShowGameBoard, 
@@ -94,7 +54,7 @@ const GamePageComponent = ({
                     content: 'Check in progress..',
                     duration: 2.5,
                 })
-                .then(() => message.success('Wrong Guess! Try Again', 1.5))
+                .then(() => message.warning('Wrong Guess! Try Again', 1.5))
                 .then(() => message.info('Check hint for more help', 2.5));
             }
         }else{
@@ -120,14 +80,14 @@ const GamePageComponent = ({
         <Row>
             {contextHolder}
             <Col span={24}>
-                <div style={headerStyle}> 
-                    <div style={heading}><Button type="text" icon={<CloseOutlined />} onClick={() => setCloseGameModal(true)}> Close Game </Button></div>
+                <div style={headerGameStyle}> 
+                    <div style={gameHeading}><Button type="text" icon={<CloseOutlined />} onClick={() => setCloseGameModal(true)}> Close Game </Button></div>
                    {showAlert &&  <Alert message="Enter all the numbers before guessing" type="warning" showIcon closable />}
-                    <div style={subHeading}>
+                    <div style={gameSubHeading}>
                         <div style={hintStyle}>
                             {`Hint: ${dead} Dead ${inj} Injured`}
                         </div>
-                        <div style={infoTextStyle}>
+                        <div style={gameInfoTextStyle}>
                             <p>Dead numbers are correct numbers in the right position</p>
                             <p>Injured numbers are correct numbers in the wrong position</p>
                         </div>
@@ -146,8 +106,8 @@ const GamePageComponent = ({
                             inputMode='numeric'
                         />
                     </div>
-                    <div style={buttonStyle}>
-                        <Button type="primary" icon={<CheckCircleOutlined />} size='large' onClick={() => checkGuess()} >
+                    <div style={gameButtonContainerStyle}>
+                        <Button type="primary" icon={<CheckCircleOutlined />} size='large' onClick={() => checkGuess()} style={buttonColor}>
                             Check Guess
                         </Button>
                     </div>
@@ -172,17 +132,22 @@ const GamePageComponent = ({
                 <p>This action will end the current game!</p>
             </Modal>
             <Modal
-                title="DING!"
+                title={winner ? `Congratulations!!!` : `Game Over!`}
                 centered
                 open={winModal}
                 closable={false}
                 footer={[
-                    <Button key="submit" type="primary" onClick={() => closeGame()} danger>
-                      CLOSE GAME BOARD
+                    <Button key="submit" type="primary" onClick={() => closeGame()} style={buttonColor}>
+                      Close Game
                     </Button>,
                   ]}
             >
-                <p> {winner ? `Congratulations! You guessed right` : `You Lost! The number is ${guessNumber.join("")} try again!`}  </p>
+                <p> 
+                    { winner 
+                    ? `You got it right, With ${tries} tries left!` 
+                    : `You Lost! The number is ${guessNumber.join("")} Try Again!`}  
+                </p>
+                <Divider />
             </Modal>
         </Row>
     );

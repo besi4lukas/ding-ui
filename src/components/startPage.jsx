@@ -1,29 +1,17 @@
 import React, { useState } from 'react';
 import { PlayCircleOutlined } from '@ant-design/icons';
-import { Col, Row, Button, Modal, InputNumber  } from 'antd';
-import { getGuessNumber } from './utils';
-
-const headerStyle = {
-    textAlign: 'center',
-    color: '#000',
-    height: 500
-  };
-
-const heading = {
-    fontSize: '96px',
-    marginTop: '120px',
-    textShadow: "2px 2px 2px #A89CC9"
-}
-
-const subHeading = {
-    fontSize: '14px',
-}
-
-const buttonStyle = {
-    fontSize: '18px',
-    marginTop: '120px',
-    fontWeight: 'bold'
-}
+import { Col, Row, Button, Modal, InputNumber, Divider, Steps   } from 'antd';
+import { getGuessNumber, LearnGameItems } from './utils';
+import { 
+    headerStartStyle, 
+    StartHeading, 
+    startSubHeading, 
+    startButtonContainerStyle, 
+    startLinkContainerStyle, 
+    linkStyle, 
+    infoTextStyle, 
+    infoTextSize, 
+    buttonColor } from './dingStyle';
 
 const StartPageComponent = ({
     setShowGameBoard, 
@@ -31,10 +19,11 @@ const StartPageComponent = ({
     setGuessNumber, 
     inputLength
 }) => {
-    const [modal2Open, setModal2Open] = useState(false);
+    const [startGameModal, setStartGameModal] = useState(false);
+    const [infoModal, setInfoModal] = useState(false);
 
     const onClickOk = () => {
-        setModal2Open(false);
+        setStartGameModal(false);
         setGuessNumber(getGuessNumber(inputLength));
         setShowGameBoard(true);
     }
@@ -46,32 +35,64 @@ const StartPageComponent = ({
     return(
         <Row>
             <Col span={24}>
-                <div style={headerStyle}> 
-                    <div style={heading}>DING!</div>
-                    <div style={subHeading}>The Number guessing Game</div>
-                    <div style={buttonStyle}>
-                        <Button type="primary" icon={<PlayCircleOutlined />} size='large' onClick={() => setModal2Open(true)} >
-                            START NEW GAME
+                <div style={headerStartStyle}> 
+                    <div style={StartHeading}>DING!</div>
+                    <div style={startSubHeading}>The Number Guessing Game</div>
+                    <div style={startButtonContainerStyle}>
+                        <Button type="primary" icon={<PlayCircleOutlined />} style={buttonColor} size='large' onClick={() => setStartGameModal(true)} >
+                            Start New Game
                         </Button>
+                    </div>
+                    <div style={startLinkContainerStyle}>
+                        <Button type="link" onClick={() => setInfoModal(true)} style={linkStyle}>Learn to Play Ding!</Button>
                     </div>
                 </div>
             </Col>
             <Modal
-                title="You can guess 3 to 6 digits"
+                title="You can guess 3 to 6 digits!"
                 centered
-                open={modal2Open}
+                open={startGameModal}
                 closable={false}
                 footer={[
-                        <Button key="back" onClick={() => setModal2Open(false)}>
+                        <Button key="back" onClick={() => setStartGameModal(false)}>
                           Return
                         </Button>,
-                        <Button key="submit" type="primary" onClick={() => onClickOk()}>
+                        <Button key="submit" type="primary" onClick={() => onClickOk()} style={buttonColor}>
                           Join Game
                         </Button>,
                       ]}
             >
-                <p>Select the number of digits to guess</p>
+                <p style={infoTextSize}>Enter the number of digits you want to guess</p>
                 <InputNumber min={3} max={6} defaultValue={3} onChange={onChange} inputMode='numeric' />
+            </Modal>
+            <Modal
+                title="How to Play Ding!"
+                centered
+                open={infoModal}
+                closable={false}
+                footer={[
+                        <Button key="back" onClick={() => setInfoModal(false)}>
+                          Close 
+                        </Button>,
+                      ]}
+            >
+                <div>
+                    Ding! is a number guessing game. 
+                    The game generates a 3 to 6 digit number for a player to guess and provides hints on each wrong guess.
+                    <Divider />
+                    <Steps
+                        progressDot
+                        current={3}
+                        direction="vertical"
+                        responsive
+                        items={LearnGameItems}
+                    />
+                    <Divider />
+                    <div style={infoTextStyle}>
+                            <p>Dead numbers are correct numbers in the right position</p>
+                            <p>Injured numbers are correct numbers in the wrong position</p>
+                    </div>
+                </div>
             </Modal>
         </Row>
     );

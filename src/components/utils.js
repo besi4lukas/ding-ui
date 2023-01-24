@@ -42,3 +42,22 @@ export const maxTries = {
     5: 20,
     6: 24
 }
+
+export const LearnGameItems = [
+    {
+    title: 'Start New Game',
+    description: 'Click start new game to start a new game.',
+    },
+    {
+    title: 'Digits to Guess',
+    description: 'Enter the number of digits you would like to guess. Players can guess 3 to 6 digits.',
+    },
+    {
+    title: 'Enter Guess',
+    description: 'Enter numbers and click Check Guess.',
+    },
+    {
+    title: 'Hints',
+    description: `The hint changes on each guess showing DEAD and INJURED numbers`,
+    },
+]
