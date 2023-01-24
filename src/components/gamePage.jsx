@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
-import { Col, Row, Button, Modal, Alert, message, Divider  } from 'antd';
+import { Col, Row, Button, Modal, message, Divider  } from 'antd';
 import PinField from "react-pin-field";
 import { checkNumberGuess, maxTries } from './utils';
 import { 
@@ -23,7 +23,6 @@ const GamePageComponent = ({
     const [closeGameModal, setCloseGameModal] = useState(false);
     const [code, setCode] = useState("");
     const [completed, setCompleted] = useState(false);
-    const [showAlert, setshowAlert] = useState(false);
     const [dead, setDead] = useState(0);
     const [inj, setInjured] = useState(0);
     const [messageApi, contextHolder] = message.useMessage();
@@ -35,6 +34,14 @@ const GamePageComponent = ({
         setShowGameBoard(false);
         setInputLength(3);
     }
+
+    const checkWarning = () => {
+        messageApi.open({
+          type: 'warning',
+          content: 'Enter all numbers before guessing',
+          duration: 5,
+        });
+    };
 
     const checkGuess = () => {
         if (completed){
@@ -58,10 +65,7 @@ const GamePageComponent = ({
                 .then(() => message.info('Check hint for more help', 2.5));
             }
         }else{
-            setshowAlert(true);
-            setTimeout(() => {
-                setshowAlert(false);
-              }, "6000")
+            checkWarning();
         }
     }
 
@@ -81,8 +85,6 @@ const GamePageComponent = ({
             {contextHolder}
             <Col span={24}>
                 <div style={headerGameStyle}> 
-                    <div style={gameHeading}><Button type="text" icon={<CloseOutlined />} onClick={() => setCloseGameModal(true)}> Close Game </Button></div>
-                   {showAlert &&  <Alert message="Enter all the numbers before guessing" type="warning" showIcon closable />}
                     <div style={gameSubHeading}>
                         <div style={hintStyle}>
                             {`Hint: ${dead} Dead ${inj} Injured`}
@@ -111,7 +113,9 @@ const GamePageComponent = ({
                             Check Guess
                         </Button>
                     </div>
-
+                    <div style={gameHeading}>
+                        <Button type="text" icon={<CloseOutlined />} onClick={() => setCloseGameModal(true)}> Close Game </Button>
+                    </div>
                 </div>
             </Col>
 

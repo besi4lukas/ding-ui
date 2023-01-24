@@ -11,16 +11,17 @@ export const headerGameStyle = {
 };
 
 export const gameHeading = {
-    textAlign: 'start',
+    textAlign: 'center',
     fontSize: '20px',
-    textShadow: "2px 2px 2px #A89CC9"
+    textShadow: "2px 2px 2px #A89CC9",
+    marginTop: '20px'
 }
 
 export const gameSubHeading = {
     textAlign: 'start',
     fontSize: '14px',
     height: 120,
-    marginTop: '50px',
+    marginTop: '80px',
     paddingLeft: '20px'
 }
 
@@ -72,13 +73,13 @@ export const hintStyle = {
 
 export const numberInputStyle = {
     height: 120,
-    paddingTop: '50px'
+    paddingTop: '30px'
 }
 
 export const gameInfoTextStyle = {
     textAlign: 'center',
     fontSize: '10px',
-    marginTop: '30px',
+    marginTop: '20px',
     height: 100
 }
 
